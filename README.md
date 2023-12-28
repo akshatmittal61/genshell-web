@@ -1,25 +1,15 @@
-# Next.js + TypeScript + MongoDB + Sass
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-
-## Features
-
--   [x] Next.js
--   [x] TypeScript
--   [x] MongoDB
--   [x] Sass
--   [x] ESLint
--   [x] Prettier
--   [x] Husky
--   [x] Commitlint
--   [x] Jest
+# GenShell - Web Interface
 
 ## Usage
 
-1.  Click the `Use this template` button.
-2.  Create a new repository.
-3.  Clone the repository.
-4.  Install dependencies.
+1.  Fork the repository.
+2.  Clone the repository.
+
+```sh
+git clone https://github.com/<username>/genshell-web.git
+```
+
+3.  Install dependencies.
 
 ```sh
 yarn
@@ -61,15 +51,3 @@ yarn format
 ## Author
 
 [Akshat Mittal](https://akshatmittal61.vercel.app)
-
-## Acknowledgements
-
--   [Next.js](https://nextjs.org)
--   [TypeScript](https://www.typescriptlang.org)
--   [MongoDB](https://www.mongodb.com)
--   [Sass](https://sass-lang.com)
--   [ESLint](https://eslint.org)
--   [Prettier](https://prettier.io)
--   [Husky](https://typicode.github.io/husky)
--   [Commitlint](https://commitlint.js.org)
--   [Jest](https://jestjs.io)

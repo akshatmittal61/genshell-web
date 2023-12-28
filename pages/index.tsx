@@ -11,12 +11,10 @@ const HomePage: React.FC = () => {
 	return (
 		<main className={classes("")}>
 			<Typography size="head-1" as="h1" weight="semi-bold">
-				NextJS Boilerplate
+				GenShell - Your AI powered shell companion
 			</Typography>
 			<Typography size="lg" as="p">
-				NextJS Boilerplate is a starter template for NextJS with
-				TypeScript, ESLint, Prettier, Husky, Commit Lint and modular
-				SASS.
+				Unleash the power of AI in your own shell and master the CLI like never before.
 			</Typography>
 			<Button onClick={() => router.push("/500")} variant="filled">
 				Check out Error Boundary

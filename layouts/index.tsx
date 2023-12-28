@@ -6,8 +6,8 @@ const Layout: React.FC<any> = ({ children }) => {
 	return (
 		<>
 			<Seo
-				title="NextJS Boilerplate"
-				description="NextJS Boilerplate with TypeScript, ESLint, Prettier, Jest, React Testing Library, SASS, and more."
+				title="GenShell - Your AI powered shell companion"
+				description="Unleash the power of AI in your own shell and master the CLI like never before."
 				image={`${frontendBaseUrl}/og-image.png`}
 				canonical={frontendBaseUrl}
 				themeColor="#0C1015"
@@ -24,16 +24,16 @@ const Layout: React.FC<any> = ({ children }) => {
 					card: "summary_large_image",
 					site: "@akshatmittal61",
 					author: "@akshatmittal61",
-					title: "NextJS Boilerplate",
+					title: "GenShell - Your AI powered shell companion",
 					description:
-						"NextJS Boilerplate with TypeScript, ESLint, Prettier, Jest, React Testing Library, SASS, and more.",
+						"Unleash the power of AI in your own shell and master the CLI like never before.",
 					image: `${frontendBaseUrl}/og-image.png`,
 					url: frontendBaseUrl,
 				}}
 				og={{
-					title: "NextJS Boilerplate",
+					title: "GenShell - Your AI powered shell companion",
 					description:
-						"NextJS Boilerplate with TypeScript, ESLint, Prettier, Jest, React Testing Library, SASS, and more.",
+						"Unleash the power of AI in your own shell and master the CLI like never before.",
 					images: [
 						{
 							url: "/images/og-image.png",
@@ -41,7 +41,7 @@ const Layout: React.FC<any> = ({ children }) => {
 							type: "image/png",
 							width: 1200,
 							height: 630,
-							alt: "NextJS Boilerplate",
+							alt: "GenShell - Your AI powered shell companion",
 						},
 						{
 							url: `${frontendBaseUrl}/favicon-192.png`,
@@ -49,7 +49,7 @@ const Layout: React.FC<any> = ({ children }) => {
 							type: "image/png",
 							width: 192,
 							height: 192,
-							alt: "NextJS Boilerplate",
+							alt: "GenShell - Your AI powered shell companion",
 						},
 						{
 							url: `${frontendBaseUrl}/favicon-512.png`,
@@ -57,12 +57,12 @@ const Layout: React.FC<any> = ({ children }) => {
 							type: "image/png",
 							width: 512,
 							height: 512,
-							alt: "NextJS Boilerplate",
+							alt: "GenShell - Your AI powered shell companion",
 						},
 					],
 					url: frontendBaseUrl,
 					type: "website",
-					siteName: "NextJS Boilerplate",
+					siteName: "GenShell - Your AI powered shell companion",
 				}}
 			/>
 			{children}
