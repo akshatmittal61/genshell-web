@@ -1,9 +1,14 @@
 import http from "../http";
+import { TOperatingSystem } from "@/types/terminal";
 
-export const requestCommandForQuery = async (query: string) => {
+export const requestCommandForQuery = async (
+	query: string,
+	os: TOperatingSystem
+) => {
 	try {
 		const res = await http.post("/generate-command", {
 			prompt: query,
+			os,
 		});
 		return Promise.resolve(res.data);
 	} catch (error) {

@@ -29,6 +29,61 @@
 		align-items: center;
 		padding: 24px 12px;
 
+		&-os {
+			position: relative;
+
+			&-button {
+				@include init-button;
+				gap: 16px;
+				border: 1px solid var(--theme-fg-2);
+				border-radius: 4px;
+				padding: 6px 12px;
+
+				svg {
+					width: 20px;
+					height: 20px;
+				}
+			}
+
+			&-dropdown {
+				position: absolute;
+				top: 100%;
+				left: 0;
+				width: 100%;
+				display: none;
+				justify-content: flex-start;
+				align-items: center;
+				flex-direction: column;
+				background-color: var(--theme-bg-2);
+				border-radius: 4px;
+				padding: 8px 0;
+				box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
+				z-index: 1;
+
+				&-item {
+					@include init-button;
+					width: 100%;
+					padding: 8px 12px;
+					border-radius: 4px;
+					justify-content: flex-start;
+					text-align: left;
+					color: var(--theme-fg);
+
+					&:hover {
+						background-color: var(--theme-bg);
+					}
+
+					&--active {
+						background-color: var(--theme-bg);
+					}
+				}
+
+				&--open {
+					display: flex;
+				}
+			}
+		}
+
 		&-buttons {
 			display: flex;
 			justify-content: flex-end;
