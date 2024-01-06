@@ -8,9 +8,14 @@ const useContextData = () => {
 		setHistory(data);
 	};
 
+	const addToHistory = (data: IHistory) => {
+		setHistory((prev) => [...prev, data]);
+	};
+
 	return {
 		history,
 		setHistory: handleHistory,
+		addToHistory,
 	};
 };
 

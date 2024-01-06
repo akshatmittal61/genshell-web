@@ -5,5 +5,6 @@ export type TOperatingSystem = "linux" | "mac" | "windows";
 export interface IHistory {
 	query: string;
 	os: TOperatingSystem;
+	state: "success" | "error" | "cancelled";
 	output: string;
 }

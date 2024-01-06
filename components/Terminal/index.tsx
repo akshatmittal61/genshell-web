@@ -5,11 +5,19 @@ import { TOperatingSystem } from "@/types/terminal";
 import { Typography } from "@/library";
 import { operatingSystems } from "@/constants/terminal";
 import { ArrowRight, Minus, X } from "react-feather";
+import { requestCommandForQuery } from "@/utils/api/terminal";
+import toast from "react-hot-toast";
 
 interface ITerminalProps {
 	viewState: "open" | "close" | "minimized";
 	onClose: () => void;
 	onMinimize: () => void;
+}
+
+interface IQuery {
+	input: string;
+	state: "success" | "pending" | "error" | null;
+	output: string;
 }
 
 const classes = stylesConfig(styles, "terminal");
@@ -19,8 +27,34 @@ const Terminal: React.FC<ITerminalProps> = ({
 	onClose,
 	onMinimize,
 }) => {
-	const [inputQuery, setInputQuery] = useState("");
 	const [activeOperatingSystem] = useState<TOperatingSystem>("linux");
+	const [query, setQuery] = useState<IQuery>({
+		input: "",
+		state: null,
+		output: "",
+	});
+
+	const updateQuery = (updatedQuery: Partial<IQuery>) => {
+		setQuery((p) => ({
+			...p,
+			...updatedQuery,
+		}));
+	};
+
+	const submitQuery = async (e: any) => {
+		e.preventDefault();
+		try {
+			updateQuery({ state: "pending" });
+			const res = await requestCommandForQuery(query.input);
+			updateQuery({ state: "success", output: res.data.toString() });
+		} catch (error: any) {
+			toast.error(error.response.data.data.toString());
+			updateQuery({
+				state: "error",
+				output: error.response.data.data.toString(),
+			});
+		}
+	};
 
 	return (
 		<main
@@ -64,16 +98,33 @@ const Terminal: React.FC<ITerminalProps> = ({
 				</div>
 			</div>
 			<section className={classes("-body")}>
-				<form className={classes("-form")}>
+				<form className={classes("-form")} onSubmit={submitQuery}>
 					<div className={classes("-form-group")}>
 						<ArrowRight />
 						<input
-							value={inputQuery}
-							onChange={(e: any) => setInputQuery(e.target.query)}
+							value={query.input}
+							autoFocus
+							onChange={(e: any) =>
+								updateQuery({ input: e.target.value })
+							}
 						/>
 					</div>
 					<button className="dispn" type="submit" />
 				</form>
+				{query.state ? (
+					<div className={classes("-result")}>
+						{query.state === "pending" ? (
+							<span className={classes("-result--pending")} />
+						) : (
+							<Typography
+								size="md"
+								className={classes(`-result--${query.state}`)}
+							>
+								{query.output}
+							</Typography>
+						)}
+					</div>
+				) : null}
 			</section>
 		</main>
 	);
