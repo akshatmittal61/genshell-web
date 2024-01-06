@@ -22,11 +22,14 @@ const HomePage: React.FC = () => {
 			<Terminal
 				viewState={terminalViewState}
 				onClose={() => {
+					if (terminalViewState === "close") return;
 					setTerminalViewState("close");
 					setHistory([]);
 				}}
 				onMinimize={() => {
-					setTerminalViewState("minimized");
+					if (terminalViewState === "minimized")
+						setTerminalViewState("open");
+					else setTerminalViewState("minimized");
 				}}
 			/>
 		</main>

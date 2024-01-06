@@ -4,9 +4,17 @@ import styles from "./styles.module.scss";
 import { TOperatingSystem } from "@/types/terminal";
 import { Typography } from "@/library";
 import { operatingSystems } from "@/constants/terminal";
-import { ArrowRight, Minus, X } from "react-feather";
+import {
+	ArrowRight,
+	ArrowUp,
+	ArrowUpCircle,
+	ChevronUp,
+	Minus,
+	X,
+} from "react-feather";
 import { requestCommandForQuery } from "@/utils/api/terminal";
 import toast from "react-hot-toast";
+import useStore from "@/hooks/store";
 
 interface ITerminalProps {
 	viewState: "open" | "close" | "minimized";
@@ -27,6 +35,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 	onClose,
 	onMinimize,
 }) => {
+	const { history, addToHistory } = useStore();
 	const [activeOperatingSystem] = useState<TOperatingSystem>("linux");
 	const [query, setQuery] = useState<IQuery>({
 		input: "",
@@ -46,10 +55,29 @@ const Terminal: React.FC<ITerminalProps> = ({
 		try {
 			updateQuery({ state: "pending" });
 			const res = await requestCommandForQuery(query.input);
-			updateQuery({ state: "success", output: res.data.toString() });
+			updateQuery({
+				state: "success",
+				input: "",
+				output: res.data.toString(),
+			});
+			addToHistory({
+				id: `${history.length}`,
+				query: query.input,
+				os: activeOperatingSystem,
+				state: "success",
+				output: res.data.toString(),
+			});
 		} catch (error: any) {
 			toast.error(error.response.data.data.toString());
 			updateQuery({
+				state: "error",
+				input: "",
+				output: error.response.data.data.toString(),
+			});
+			addToHistory({
+				id: `${history.length}`,
+				query: query.input,
+				os: activeOperatingSystem,
 				state: "error",
 				output: error.response.data.data.toString(),
 			});
@@ -62,8 +90,6 @@ const Terminal: React.FC<ITerminalProps> = ({
 				"--minimized": viewState === "minimized",
 				"--close": viewState === "close",
 			})}
-			data-aos="fade-up"
-			data-aos-duration="1000"
 		>
 			<div className={classes("-header")}>
 				<Typography size="lg" className={classes("-header-system")}>
@@ -84,7 +110,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 							"-header-button--minimize"
 						)}
 					>
-						<Minus />
+						{viewState === "minimized" ? <ChevronUp /> : <Minus />}
 					</button>
 					<button
 						onClick={onClose}
@@ -98,15 +124,40 @@ const Terminal: React.FC<ITerminalProps> = ({
 				</div>
 			</div>
 			<section className={classes("-body")}>
+				{history.map((item) => (
+					<div className={classes("-history-item")} key={item.id}>
+						<div className={classes("-history-item-input")}>
+							<ArrowRight />
+							<Typography size="md">{item.query}</Typography>
+						</div>
+						<div className={classes("-history-item-result")}>
+							<Typography
+								size="md"
+								className={classes(
+									`-history-item-result--${item.state}`
+								)}
+							>
+								{item.output}
+							</Typography>
+						</div>
+					</div>
+				))}
 				<form className={classes("-form")} onSubmit={submitQuery}>
 					<div className={classes("-form-group")}>
 						<ArrowRight />
 						<input
 							value={query.input}
 							autoFocus
-							onChange={(e: any) =>
-								updateQuery({ input: e.target.value })
-							}
+							placeholder="Ask away..."
+							name="query"
+							onChange={(e: any) => {
+								if (query.state)
+									updateQuery({
+										input: e.target.value,
+										state: null,
+									});
+								else updateQuery({ input: e.target.value });
+							}}
 						/>
 					</div>
 					<button className="dispn" type="submit" />
