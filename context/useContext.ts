@@ -1,14 +1,16 @@
+import { IHistory } from "@/types/terminal";
 import { useState } from "react";
 
 const useContextData = () => {
-	const [theme, setTheme] = useState<"light" | "dark">("light");
-	const handleTheme = (theme: "light" | "dark") => {
-		setTheme(theme);
+	const [history, setHistory] = useState<IHistory[]>([]);
+
+	const handleHistory = (data: IHistory[]) => {
+		setHistory(data);
 	};
 
 	return {
-		theme,
-		setTheme: handleTheme,
+		history,
+		setHistory: handleHistory,
 	};
 };
 

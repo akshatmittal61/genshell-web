@@ -1,8 +1,9 @@
+import { IHistory } from "@/types/terminal";
 import { createContext } from "react";
 
 const GlobalContext = createContext({
-	theme: "light" as "light" | "dark",
-	setTheme: (_: "light" | "dark") => {},
+	history: [],
+	setHistory: (_: IHistory[]) => {},
 });
 
 export default GlobalContext;
