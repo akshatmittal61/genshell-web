@@ -61,7 +61,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 			updateQuery({
 				state: "success",
 				input: "",
-				output: res.data.toString(),
+				output: "",
 			});
 			addToHistory({
 				id: `${history.length}`,
@@ -75,7 +75,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 			updateQuery({
 				state: "error",
 				input: "",
-				output: error.response.data.data.toString(),
+				output: "",
 			});
 			addToHistory({
 				id: `${history.length}`,

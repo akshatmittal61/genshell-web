@@ -6,8 +6,8 @@ export const requestCommandForQuery = async (
 	os: TOperatingSystem
 ) => {
 	try {
-		const res = await http.post("/generate-command", {
-			prompt: query,
+		const res = await http.post("/generate", {
+			input: query,
 			os,
 		});
 		return Promise.resolve(res.data);
