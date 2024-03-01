@@ -1,5 +1,13 @@
 import React, { useRef, useState } from "react";
-import { ArrowRight, ChevronDown, ChevronUp, Minus, X } from "react-feather";
+import {
+	ArrowRight,
+	Check,
+	ChevronDown,
+	ChevronUp,
+	Copy,
+	Minus,
+	X,
+} from "react-feather";
 import toast from "react-hot-toast";
 import { operatingSystems } from "@/constants/terminal";
 import { useOnClickOutside } from "@/hooks/mouse-events";
@@ -7,7 +15,7 @@ import useStore from "@/hooks/store";
 import { Typography } from "@/library";
 import { TOperatingSystem } from "@/types/terminal";
 import { requestCommandForQuery } from "@/utils/api/terminal";
-import { stylesConfig } from "@/utils/functions";
+import { copyToClipboard, stylesConfig } from "@/utils/functions";
 import styles from "./styles.module.scss";
 
 interface ITerminalProps {
@@ -34,14 +42,34 @@ const Terminal: React.FC<ITerminalProps> = ({
 	const [activeOperatingSystem, setActiveOperatingSystem] =
 		useState<TOperatingSystem>("linux");
 	const [openOsSelectorDropdown, setOpenOsSelectorDropdown] = useState(false);
+	const [copyIcon, setCopyIcon] = useState({
+		id: "",
+		icon: <Copy />,
+	});
+
 	useOnClickOutside(osSelectorDropdownRef, () => {
 		setOpenOsSelectorDropdown(false);
 	});
+
 	const [query, setQuery] = useState<IQuery>({
 		input: "",
 		state: null,
 		output: "",
 	});
+
+	const copyResult = (id: string, text: string) => {
+		copyToClipboard(text);
+		setCopyIcon({
+			id,
+			icon: <Check />,
+		});
+		setTimeout(() => {
+			setCopyIcon({
+				id: "",
+				icon: <Copy />,
+			});
+		}, 1000);
+	};
 
 	const updateQuery = (updatedQuery: Partial<IQuery>) => {
 		setQuery((p) => ({
@@ -179,6 +207,22 @@ const Terminal: React.FC<ITerminalProps> = ({
 							>
 								{item.output}
 							</Typography>
+							{item.state === "success" ? (
+								<button
+									className={classes(
+										"-history-item-result-copy"
+									)}
+									onClick={() =>
+										copyResult(item.id, item.output)
+									}
+								>
+									{copyIcon.id === item.id ? (
+										copyIcon.icon
+									) : (
+										<Copy />
+									)}
+								</button>
+							) : null}
 						</div>
 					</div>
 				))}

@@ -146,6 +146,19 @@
 
 			&-result {
 				padding-left: 40px;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				gap: 16px;
+
+				&-copy {
+					@include init-button;
+
+					svg {
+						width: 20px;
+						height: 20px;
+					}
+				}
 
 				&--error {
 					color: var(--theme-red);
