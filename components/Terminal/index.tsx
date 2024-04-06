@@ -32,7 +32,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 		id: "",
 		icon: <Copy />,
 	});
-	const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
+	const [activeTab, setActiveTab] = useState<string>(tabs[0]?.id ?? "");
 
 	const [query, setQuery] = useState<IQuery>({
 		input: "",
