@@ -2,6 +2,7 @@ import React from "react";
 import Seo from "./Seo";
 import { frontendBaseUrl } from "@/constants/variables";
 import { Toaster } from "react-hot-toast";
+import Header from "@/components/Header";
 
 const Layout: React.FC<any> = ({ children }) => {
 	return (
@@ -66,6 +67,7 @@ const Layout: React.FC<any> = ({ children }) => {
 					siteName: "GenShell - Your AI powered shell companion",
 				}}
 			/>
+			<Header />
 			{children}
 			<Toaster position="top-center" reverseOrder={false} />
 		</>

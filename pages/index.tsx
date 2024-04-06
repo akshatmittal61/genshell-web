@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import { Typography } from "@/library";
-import { stylesConfig } from "@/utils/functions";
-import styles from "@/styles/pages/Home.module.scss";
 import Terminal from "@/components/Terminal";
 import useStore from "@/hooks/store";
-import Image from "next/image";
-import Link from "next/link";
+import { Typography } from "@/library";
+import styles from "@/styles/pages/Home.module.scss";
+import { stylesConfig } from "@/utils/functions";
+import React, { useState } from "react";
 
 const classes = stylesConfig(styles, "home");
 
@@ -18,33 +16,6 @@ const HomePage: React.FC = () => {
 
 	return (
 		<main className={classes("")}>
-			<header className={classes("-header")}>
-				<Link href="/" className={classes("-header-logo")}>
-					<Image
-						src="/favicon.png"
-						alt="GenShell"
-						width={500}
-						height={500}
-					/>
-				</Link>
-				<div className={classes("-header-actions")}>
-					<Link href="/feedback">Feedback</Link>
-					<button className={classes("-header-burger")}>
-						<span
-							className={classes(
-								"-header-burger-line",
-								"-header-burger-line--1"
-							)}
-						/>
-						<span
-							className={classes(
-								"-header-burger-line",
-								"-header-burger-line--2"
-							)}
-						/>
-					</button>
-				</div>
-			</header>
 			<section className={classes("-main")}>
 				<Typography size="head-2" weight="bold" as="h1">
 					Generate. Refine. Build
