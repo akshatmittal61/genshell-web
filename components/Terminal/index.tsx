@@ -1,23 +1,11 @@
-import React, { useRef, useState } from "react";
-import Header from "./Header";
-import {
-	ArrowRight,
-	Check,
-	ChevronDown,
-	ChevronUp,
-	Copy,
-	Maximize,
-	Minimize,
-	Minus,
-	X,
-} from "react-feather";
-import toast from "react-hot-toast";
-import { useOnClickOutside } from "@/hooks/mouse-events";
 import useStore from "@/hooks/store";
 import { Typography } from "@/library";
-import { ITab, TOperatingSystem } from "@/types/terminal";
 import { requestCommandForQuery } from "@/utils/api/terminal";
 import { copyToClipboard, stylesConfig } from "@/utils/functions";
+import React, { useState } from "react";
+import { ArrowRight, Check, Copy } from "react-feather";
+import toast from "react-hot-toast";
+import Header from "./Header";
 import styles from "./styles.module.scss";
 
 interface ITerminalProps {
@@ -40,19 +28,11 @@ const Terminal: React.FC<ITerminalProps> = ({
 	onMinimize,
 }) => {
 	const { history, addToHistory, tabs } = useStore();
-	const osSelectorDropdownRef = useRef<any>(null);
-	const [activeOperatingSystem, setActiveOperatingSystem] =
-		useState<TOperatingSystem>("linux");
-	const [openOsSelectorDropdown, setOpenOsSelectorDropdown] = useState(false);
 	const [copyIcon, setCopyIcon] = useState({
 		id: "",
 		icon: <Copy />,
 	});
 	const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
-
-	useOnClickOutside(osSelectorDropdownRef, () => {
-		setOpenOsSelectorDropdown(false);
-	});
 
 	const [query, setQuery] = useState<IQuery>({
 		input: "",
@@ -83,12 +63,11 @@ const Terminal: React.FC<ITerminalProps> = ({
 
 	const submitQuery = async (e: any) => {
 		e.preventDefault();
+		const currentOS =
+			tabs.find((tab) => tab.id === activeTab)?.os ?? "linux";
 		try {
 			updateQuery({ state: "pending" });
-			const res = await requestCommandForQuery(
-				query.input,
-				activeOperatingSystem
-			);
+			const res = await requestCommandForQuery(query.input, currentOS);
 			updateQuery({
 				state: "success",
 				input: "",
@@ -97,7 +76,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 			addToHistory({
 				id: `${history.length}`,
 				query: query.input,
-				os: activeOperatingSystem,
+				os: currentOS,
 				state: "success",
 				output: res.data.toString(),
 				tab: activeTab,
@@ -112,7 +91,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 			addToHistory({
 				id: `${history.length}`,
 				query: query.input,
-				os: activeOperatingSystem,
+				os: currentOS,
 				state: "error",
 				output: error.response.data.data.toString(),
 				tab: activeTab,

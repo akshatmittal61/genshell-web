@@ -5,6 +5,7 @@ export type TOperatingSystem = "linux" | "mac" | "windows";
 export interface ITab {
 	id: string;
 	name: string;
+	os: TOperatingSystem;
 	shell: TShell;
 }
 

@@ -66,6 +66,19 @@
 		color: var(--color-natural-500);
 		border-radius: 8px 8px 0 0;
 
+		&-descriptor {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			gap: 8px;
+
+			img {
+				height: 100%;
+				width: auto;
+				object-fit: contain;
+			}
+		}
+
 		&:hover {
 			filter: brightness(2);
 		}

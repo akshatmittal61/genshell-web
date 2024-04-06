@@ -1,3 +1,4 @@
+import { operatingSystems } from "@/constants/terminal";
 import { IHistory, ITab, TShell } from "@/types/terminal";
 import { useState } from "react";
 
@@ -8,6 +9,7 @@ const useContextData = () => {
 			id: "0",
 			name: "Terminal",
 			shell: "bash",
+			os: "linux",
 		},
 	]);
 
@@ -28,6 +30,9 @@ const useContextData = () => {
 			id: `${tabs.length}`,
 			name,
 			shell,
+			os:
+				operatingSystems.find((os) => os.shell === shell)?.id ||
+				"linux",
 		};
 		setTabs((prev) => [...prev, newTab]);
 		return newTab;

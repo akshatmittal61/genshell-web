@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import { getNewFileName, stylesConfig } from "@/utils/functions";
-import styles from "./styles.module.scss";
-import { Maximize, Minimize, Minus, Plus, Settings, X } from "react-feather";
-import useStore from "@/hooks/store";
 import { operatingSystems } from "@/constants/terminal";
 import { useOnClickOutside } from "@/hooks/mouse-events";
+import useStore from "@/hooks/store";
+import { getNewFileName, stylesConfig } from "@/utils/functions";
+import React, { useEffect, useRef, useState } from "react";
+import { Maximize, Minimize, Minus, Plus, Settings, X } from "react-feather";
+import styles from "./styles.module.scss";
 
 interface ITerminalHeaderProps {
 	onClose: () => void;
@@ -119,7 +119,13 @@ const TerminalHeader: React.FC<ITerminalHeaderProps> = ({
 							"-tab--active": tab.id === activeTab,
 						})}
 					>
-						{tab.name}
+						<div className={classes("-tab-descriptor")}>
+							{
+								operatingSystems.find((os) => os.id === tab.os)
+									?.icon
+							}
+							{tab.name}
+						</div>
 						{tabs.length > 1 && (
 							<X
 								onClick={() => {
