@@ -73,3 +73,25 @@ export const omitKeys = (obj: any, keys: string[]) => {
 // function to round off a number to given decimal places
 export const roundOff = (num: number, decimalPlaces: number) =>
 	Math.round(num * 10 ** decimalPlaces) / 10 ** decimalPlaces;
+
+// get new file name
+
+export const getNewFileName = (newFileTitle: string, files: string[]) => {
+	if (files.find((file: any) => file.title === newFileTitle)) {
+		const titleRegex = new RegExp(`${newFileTitle} \\((\\d+)\\)`);
+		const similarFiles = files.filter((file: any) => titleRegex.test(file));
+		if (similarFiles.length > 0) {
+			const lastFileTitle = similarFiles[similarFiles.length - 1];
+			const lastFileTitleMatch = lastFileTitle.match(titleRegex);
+			if (lastFileTitleMatch) {
+				const lastFileTitleNumber = parseInt(lastFileTitleMatch[1]);
+				newFileTitle = `${newFileTitle} (${lastFileTitleNumber + 1})`;
+			} else {
+				newFileTitle = `${newFileTitle} (1)`;
+			}
+		} else {
+			newFileTitle = `${newFileTitle} (1)`;
+		}
+	}
+	return newFileTitle;
+};

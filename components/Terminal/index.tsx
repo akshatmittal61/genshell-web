@@ -1,19 +1,21 @@
 import React, { useRef, useState } from "react";
+import Header from "./Header";
 import {
 	ArrowRight,
 	Check,
 	ChevronDown,
 	ChevronUp,
 	Copy,
+	Maximize,
+	Minimize,
 	Minus,
 	X,
 } from "react-feather";
 import toast from "react-hot-toast";
-import { operatingSystems } from "@/constants/terminal";
 import { useOnClickOutside } from "@/hooks/mouse-events";
 import useStore from "@/hooks/store";
 import { Typography } from "@/library";
-import { TOperatingSystem } from "@/types/terminal";
+import { ITab, TOperatingSystem } from "@/types/terminal";
 import { requestCommandForQuery } from "@/utils/api/terminal";
 import { copyToClipboard, stylesConfig } from "@/utils/functions";
 import styles from "./styles.module.scss";
@@ -37,7 +39,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 	onClose,
 	onMinimize,
 }) => {
-	const { history, addToHistory } = useStore();
+	const { history, addToHistory, tabs } = useStore();
 	const osSelectorDropdownRef = useRef<any>(null);
 	const [activeOperatingSystem, setActiveOperatingSystem] =
 		useState<TOperatingSystem>("linux");
@@ -46,6 +48,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 		id: "",
 		icon: <Copy />,
 	});
+	const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
 
 	useOnClickOutside(osSelectorDropdownRef, () => {
 		setOpenOsSelectorDropdown(false);
@@ -97,6 +100,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 				os: activeOperatingSystem,
 				state: "success",
 				output: res.data.toString(),
+				tab: activeTab,
 			});
 		} catch (error: any) {
 			toast.error(error.response.data.data.toString());
@@ -111,6 +115,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 				os: activeOperatingSystem,
 				state: "error",
 				output: error.response.data.data.toString(),
+				tab: activeTab,
 			});
 		}
 	};
@@ -121,111 +126,53 @@ const Terminal: React.FC<ITerminalProps> = ({
 				"--minimized": viewState === "minimized",
 				"--close": viewState === "close",
 			})}
+			id="terminal"
 		>
-			<div className={classes("-header")}>
-				<div className={classes("-header-os")}>
-					<button
-						className={classes("-header-os-button")}
-						onClick={() => setOpenOsSelectorDropdown((p) => !p)}
-					>
-						<Typography
-							size="md"
-							className={classes("-header-system")}
-						>
-							{
-								operatingSystems.find(
-									(os) => os.id === activeOperatingSystem
-								)?.name
-							}
-						</Typography>
-						<ChevronDown />
-					</button>
-					<div
-						className={classes("-header-os-dropdown", {
-							"-header-os-dropdown--open": openOsSelectorDropdown,
-						})}
-						ref={osSelectorDropdownRef}
-					>
-						{operatingSystems.map((os) => (
-							<button
-								key={os.id}
-								className={classes("-header-os-dropdown-item", {
-									"-header-os-dropdown-item--active":
-										activeOperatingSystem === os.id,
-								})}
-								onClick={() => {
-									setActiveOperatingSystem(os.id);
-									setOpenOsSelectorDropdown(false);
-								}}
-							>
-								<Typography size="md">{os.name}</Typography>
-							</button>
-						))}
-					</div>
-				</div>
-				<Typography size="xl" className={classes("-header-title")}>
-					{activeOperatingSystem === "linux"
-						? "Bash"
-						: activeOperatingSystem === "windows"
-							? "Powershell"
-							: "Zsh"}
-				</Typography>
-				<div className={classes("-header-buttons")}>
-					<button
-						onClick={onMinimize}
-						className={classes(
-							"-header-button",
-							"-header-button--minimize"
-						)}
-					>
-						{viewState === "minimized" ? <ChevronUp /> : <Minus />}
-					</button>
-					<button
-						onClick={onClose}
-						className={classes(
-							"-header-button",
-							"-header-button--close"
-						)}
-					>
-						<X />
-					</button>
-				</div>
-			</div>
+			<Header
+				onClose={onClose}
+				onMinimize={onMinimize}
+				activeTab={activeTab}
+				setActiveTab={(newTab) => {
+					setActiveTab(() => newTab);
+				}}
+			/>
 			<section className={classes("-body")}>
-				{history.map((item) => (
-					<div className={classes("-history-item")} key={item.id}>
-						<div className={classes("-history-item-input")}>
-							<ArrowRight />
-							<Typography size="md">{item.query}</Typography>
-						</div>
-						<div className={classes("-history-item-result")}>
-							<Typography
-								size="md"
-								className={classes(
-									`-history-item-result--${item.state}`
-								)}
-							>
-								{item.output}
-							</Typography>
-							{item.state === "success" ? (
-								<button
+				{history
+					.filter((item) => item.tab === activeTab)
+					.map((item) => (
+						<div className={classes("-history-item")} key={item.id}>
+							<div className={classes("-history-item-input")}>
+								<ArrowRight />
+								<Typography size="md">{item.query}</Typography>
+							</div>
+							<div className={classes("-history-item-result")}>
+								<Typography
+									size="md"
 									className={classes(
-										"-history-item-result-copy"
+										`-history-item-result--${item.state}`
 									)}
-									onClick={() =>
-										copyResult(item.id, item.output)
-									}
 								>
-									{copyIcon.id === item.id ? (
-										copyIcon.icon
-									) : (
-										<Copy />
-									)}
-								</button>
-							) : null}
+									{item.output}
+								</Typography>
+								{item.state === "success" ? (
+									<button
+										className={classes(
+											"-history-item-result-copy"
+										)}
+										onClick={() =>
+											copyResult(item.id, item.output)
+										}
+									>
+										{copyIcon.id === item.id ? (
+											copyIcon.icon
+										) : (
+											<Copy />
+										)}
+									</button>
+								) : null}
+							</div>
 						</div>
-					</div>
-				))}
+					))}
 				<form className={classes("-form")} onSubmit={submitQuery}>
 					<div className={classes("-form-group")}>
 						<ArrowRight />
