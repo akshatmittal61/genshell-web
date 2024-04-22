@@ -19,7 +19,7 @@ const HomePage: React.FC<HomePageProps> = (props) => {
 		"open" | "close" | "minimized"
 	>("open");
 	const [activeWindow, setActiveWindow] = useState<"auth" | "terminal">(
-		"auth"
+		props.user?.id ? "terminal" : "auth"
 	);
 
 	const { setHistory, user, setUser } = useStore();

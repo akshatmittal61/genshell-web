@@ -14,6 +14,7 @@ const GlobalContext = createContext({
 	removeTab: (_: string) => {},
 	user: null as User | null,
 	setUser: (_: User) => {},
+	logout: () => {},
 });
 
 export default GlobalContext;

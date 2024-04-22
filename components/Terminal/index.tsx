@@ -27,7 +27,7 @@ const Terminal: React.FC<ITerminalProps> = ({
 	onClose,
 	onMinimize,
 }) => {
-	const { history, addToHistory, tabs } = useStore();
+	const { history, addToHistory, tabs, logout } = useStore();
 	const [copyIcon, setCopyIcon] = useState({
 		id: "",
 		icon: <Copy />,
@@ -81,6 +81,9 @@ const Terminal: React.FC<ITerminalProps> = ({
 				output: res.data.toString(),
 				tab: activeTab,
 			});
+			if (query.input === "\\logout") {
+				logout();
+			}
 		} catch (error: any) {
 			toast.error(error.response.data.data.toString());
 			updateQuery({
@@ -122,11 +125,11 @@ const Terminal: React.FC<ITerminalProps> = ({
 						<div className={classes("-history-item")} key={item.id}>
 							<div className={classes("-history-item-input")}>
 								<ArrowRight />
-								<Typography size="md">{item.query}</Typography>
+								<Typography size="s">{item.query}</Typography>
 							</div>
 							<div className={classes("-history-item-result")}>
 								<Typography
-									size="md"
+									size="sm"
 									className={classes(
 										`-history-item-result--${item.state}`
 									)}

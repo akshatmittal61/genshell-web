@@ -30,6 +30,7 @@ export const verify = async (req: ApiRequest, res: ApiResponse) => {
 			.json({ message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
 	}
 };
+
 export const register = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const { name, email, password } = req.body;
@@ -85,6 +86,47 @@ export const login = async (req: ApiRequest, res: ApiResponse) => {
 		});
 	} catch (error) {
 		console.error(error);
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
+	}
+};
+
+export const logout = async (_: ApiRequest, res: ApiResponse) => {
+	try {
+		res.setHeader(
+			"Set-Cookie",
+			"token=; HttpOnly; Path=/; Max-Age=0; SameSite=None; Secure=true"
+		);
+		return res.status(200).json({ message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error) {
+		console.error(error);
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
+	}
+};
+
+export const profile = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const token = req.cookies.token;
+		if (!token) {
+			return res
+				.status(401)
+				.json({ message: RESPONSE_MESSAGES.BAD_REQUEST });
+		}
+		const user = await authService.authenticate(token);
+		if (!user) {
+			return res
+				.status(401)
+				.json({ message: RESPONSE_MESSAGES.UNAUTHORIZED });
+		}
+		return res.status(200).json({
+			message: RESPONSE_MESSAGES.SUCCESS,
+			data: omitKeys(user, ["password", "id"]),
+		});
+	} catch (error) {
+		// console.error(error);
 		return res
 			.status(500)
 			.json({ message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
