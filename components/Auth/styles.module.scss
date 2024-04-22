@@ -1,0 +1,118 @@
+@import "@/styles/config/mixins";
+
+.auth {
+	width: 60%;
+	min-height: 400px;
+	max-height: 75vh;
+	border-radius: 16px;
+	background-color: var(--theme-bg-2);
+	color: var(--theme-fg);
+	padding: 0 16px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: stretch;
+	flex-direction: column;
+	border: 1px solid rgba(113, 113, 122, 0.75);
+	position: relative;
+
+	&--minimized {
+		height: auto;
+		margin-top: auto;
+	}
+
+	&--minimized &-body {
+		height: 0;
+		gap: 0;
+	}
+
+	&-body {
+		width: 100%;
+		flex: 0 1 auto;
+		overflow-y: auto;
+		padding: 24px 12px;
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	&-item {
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		gap: 8px;
+		white-space: nowrap;
+
+		svg {
+			stroke: var(--theme-code-green);
+		}
+
+		&-input {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			gap: 16px;
+		}
+
+		&-result {
+			padding-left: 40px;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			gap: 16px;
+
+			&-copy {
+				@include init-button;
+
+				svg {
+					width: 20px;
+					height: 20px;
+				}
+			}
+
+			&--error {
+				color: var(--theme-red);
+			}
+		}
+	}
+
+	&-btn {
+		@include init-button;
+		gap: 8px;
+		font-family: inherit;
+		line-height: initial;
+		font-weight: 700;
+		transition-duration: 0.1s;
+		transition-property: background-color, color, border-color, opacity,
+			box-shadow;
+		transition-timing-function: ease-out;
+		outline: none;
+		border: 1px solid transparent;
+		margin: 0px;
+		box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 12px 0px;
+		padding-block: 3px;
+		padding-inline: 20px;
+		min-height: 40px;
+		background-color: rgb(255, 255, 255);
+		color: rgb(0, 0, 0);
+		border-radius: 4px;
+		font-size: 12px;
+		margin-left: 28px;
+
+		svg {
+			width: 16px;
+			height: 16px;
+		}
+	}
+
+	&-foot {
+		position: absolute;
+		bottom: 16px;
+		right: 16px;
+		font-style: italic;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+}

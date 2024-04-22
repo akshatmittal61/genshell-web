@@ -6,7 +6,7 @@ import { userService } from ".";
 export const authenticate = async (token: string): Promise<User | null> => {
 	try {
 		const decoded: any = jwt.verify(token, jwtSecret);
-		const foundUser = await userService.find({ id: decoded.id });
+		const foundUser = await userService.findById(decoded.id);
 		if (!foundUser) {
 			return null;
 		}
@@ -16,3 +16,8 @@ export const authenticate = async (token: string): Promise<User | null> => {
 		return null;
 	}
 };
+
+export const generateToken = (id: string): string =>
+	jwt.sign({ id }, jwtSecret, {
+		expiresIn: "30d",
+	});

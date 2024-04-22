@@ -1,10 +1,11 @@
-import Terminal from "@/components/Terminal";
+import { Auth, Terminal } from "@/components";
 import useStore from "@/hooks/store";
 import { Typography } from "@/library";
 import styles from "@/styles/pages/Home.module.scss";
 import { User } from "@/types/user";
 import { authApi } from "@/utils/api";
 import { stylesConfig } from "@/utils/functions";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 interface HomePageProps {
@@ -13,17 +14,28 @@ interface HomePageProps {
 
 const classes = stylesConfig(styles, "home");
 
-const HomePage: React.FC<HomePageProps> = ({ user }) => {
+const HomePage: React.FC<HomePageProps> = (props) => {
 	const [terminalViewState, setTerminalViewState] = useState<
 		"open" | "close" | "minimized"
 	>("open");
+	const [activeWindow, setActiveWindow] = useState<"auth" | "terminal">(
+		"auth"
+	);
 
-	const { setHistory, setUser } = useStore();
+	const { setHistory, user, setUser } = useStore();
 
 	useEffect(() => {
-		if (user) setUser(user);
+		if (props.user) setUser(props.user);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	useEffect(() => {
+		if (user?.id) {
+			setActiveWindow("terminal");
+		} else {
+			setActiveWindow("auth");
+		}
+	}, [user]);
 
 	return (
 		<main className={classes("")}>
@@ -35,19 +47,46 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
 					Unleash the power of AI in your own shell and master the CLI
 					like never before.
 				</Typography>
-				<Terminal
-					viewState={terminalViewState}
-					onClose={() => {
-						if (terminalViewState === "close") return;
-						setTerminalViewState("close");
-						setHistory([]);
-					}}
-					onMinimize={() => {
-						if (terminalViewState === "minimized")
-							setTerminalViewState("open");
-						else setTerminalViewState("minimized");
-					}}
-				/>
+				{activeWindow === "terminal" ? (
+					<Terminal
+						viewState={terminalViewState}
+						onClose={() => {
+							if (terminalViewState === "close") return;
+							setTerminalViewState("close");
+							setHistory([]);
+						}}
+						onMinimize={() => {
+							if (terminalViewState === "minimized")
+								setTerminalViewState("open");
+							else setTerminalViewState("minimized");
+						}}
+					/>
+				) : (
+					<Auth
+						viewState={terminalViewState}
+						onClose={() => {
+							if (terminalViewState === "close") return;
+							setTerminalViewState("close");
+							setHistory([]);
+						}}
+						onMinimize={() => {
+							if (terminalViewState === "minimized")
+								setTerminalViewState("open");
+							else setTerminalViewState("minimized");
+						}}
+					/>
+				)}
+				{activeWindow === "terminal" ? (
+					<div className={classes("-animation")}>
+						<Typography size="xs">Hello {user?.name}</Typography>
+						<Image
+							src="/animations/bot.gif"
+							alt="bot"
+							width={1920}
+							height={1080}
+						/>
+					</div>
+				) : null}
 			</section>
 		</main>
 	);
