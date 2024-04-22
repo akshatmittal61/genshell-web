@@ -1,8 +1,18 @@
 import { operatingSystems } from "@/constants/terminal";
 import { IHistory, ITab, TShell } from "@/types/terminal";
+import { User } from "@/types/user";
 import { useState } from "react";
 
 const useContextData = () => {
+	const [user, setUser] = useState<User | null>(null);
+
+	const handleUser = (updatedUser: User) => {
+		setUser((prev) => ({
+			...prev,
+			...updatedUser,
+		}));
+	};
+
 	const [history, setHistory] = useState<IHistory[]>([]);
 	const [tabs, setTabs] = useState<ITab[]>([
 		{
@@ -51,6 +61,8 @@ const useContextData = () => {
 		setTabs: handleTabs,
 		createTab,
 		removeTab,
+		user,
+		setUser: handleUser,
 	};
 };
 

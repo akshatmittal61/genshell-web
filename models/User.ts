@@ -1,4 +1,3 @@
-import { USER_ROLES } from "@/constants/enum";
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
@@ -16,17 +15,12 @@ const UserSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		role: {
-			type: String,
-			default: USER_ROLES.USER,
-			enum: Object.values(USER_ROLES),
-		},
 	},
 	{
 		timestamps: true,
 	}
 );
 
-const User = mongoose.models.User || mongoose.model("User", UserSchema);
+const UserModel = mongoose.models.User || mongoose.model("User", UserSchema);
 
-export default User;
+export default UserModel;

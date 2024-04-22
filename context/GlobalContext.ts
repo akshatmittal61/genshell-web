@@ -1,4 +1,5 @@
 import { IHistory, ITab, TShell } from "@/types/terminal";
+import { User } from "@/types/user";
 import { createContext } from "react";
 
 const GlobalContext = createContext({
@@ -11,6 +12,8 @@ const GlobalContext = createContext({
 		return {} as ITab;
 	},
 	removeTab: (_: string) => {},
+	user: null as User | null,
+	setUser: (_: User) => {},
 });
 
 export default GlobalContext;
