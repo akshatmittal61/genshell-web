@@ -1,12 +1,10 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
 import { getAllUsers } from "@/controllers/user";
-import connectDB from "@/db";
 import authMiddleware from "@/middleware/auth";
 import { ApiRequest, ApiResponse } from "@/types/api";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {
 	try {
-		await connectDB();
 		const { method } = req;
 		switch (method) {
 			case "GET":
@@ -17,7 +15,9 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 		}
 	} catch (error) {
 		console.error(error);
-		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+		return res
+			.status(500)
+			.json({ error: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
 	}
 };
 

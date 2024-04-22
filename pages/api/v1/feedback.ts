@@ -20,7 +20,7 @@ const handler: NextApiHandler = async (req: ApiRequest, res: ApiResponse) => {
 	} catch (error: any) {
 		console.error(error);
 		return res.status(500).json({
-			message: error.message || RESPONSE_MESSAGES.SERVER_ERROR,
+			message: error.message || RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR,
 		});
 	}
 };

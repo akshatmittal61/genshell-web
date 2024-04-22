@@ -10,6 +10,8 @@ export const getAllUsers = async (req: ApiRequest, res: ApiResponse) => {
 		return res.status(200).json({ data: allUsers });
 	} catch (error) {
 		console.error(error);
-		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+		return res
+			.status(500)
+			.json({ error: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
 	}
 };
