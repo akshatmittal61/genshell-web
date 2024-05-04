@@ -5,18 +5,16 @@ import { ApiRequest, ApiResponse } from "@/types/api";
 const authMiddleware =
 	(next: Function) => (req: ApiRequest, res: ApiResponse) => {
 		// get x-auth-token from header
-		const token = req.headers["x-auth-token"] + "";
+		const token = req.cookies.token;
 		if (!token) {
-			return res
-				.status(401)
-				.json({ message: "No token, authorization denied" });
+			return res.status(401).json({ message: "Login to continue" });
 		}
 		try {
 			const decoded: any = jwt.verify(token, jwtSecret);
-			req.user = decoded.user;
+			req.user = decoded;
 			return next(req, res);
 		} catch (err) {
-			return res.status(401).json({ message: "Token is not valid" });
+			return res.status(401).json({ message: "Login to continue" });
 		}
 	};
 

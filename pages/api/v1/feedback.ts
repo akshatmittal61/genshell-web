@@ -1,6 +1,8 @@
-import { NextApiHandler } from "next";
 import { RESPONSE_MESSAGES } from "@/constants/enum";
+import { feedbackControllers } from "@/controllers";
+import authMiddleware from "@/middleware/auth";
 import { ApiRequest, ApiResponse } from "@/types/api";
+import { NextApiHandler } from "next";
 
 const handler: NextApiHandler = async (req: ApiRequest, res: ApiResponse) => {
 	try {
@@ -8,9 +10,10 @@ const handler: NextApiHandler = async (req: ApiRequest, res: ApiResponse) => {
 
 		switch (method) {
 			case "POST":
-				return res
-					.status(200)
-					.json({ message: "Feedback submitted successfully" });
+				return authMiddleware(feedbackControllers.createFeedback)(
+					req,
+					res
+				);
 			default:
 				res.setHeader("Allow", ["POST"]);
 				return res

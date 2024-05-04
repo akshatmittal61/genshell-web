@@ -16,9 +16,11 @@ const FeedbackPage: React.FC = () => {
 		try {
 			const res = await submitFeedback(message);
 			toast.success(res.message);
-		} catch (error) {
+		} catch (error: any) {
 			console.error(error);
-			toast.error("Failed to submit feedback");
+			toast.error(
+				error.response.data.message || "Failed to submit feedback"
+			);
 		} finally {
 			setLoading(false);
 		}

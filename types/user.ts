@@ -4,3 +4,9 @@ export type User = {
 	email: string;
 	password: string;
 };
+
+export type Feedback = {
+	id: string;
+	message: string;
+	user: string;
+};
